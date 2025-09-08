@@ -53,3 +53,71 @@ Banco de dados criado
 ---
 
 ## Criar EC2 na Subnet Pública  
+
+Nome da instãncia: Projeto-final-AWS  
+<img width="948" height="654" alt="image" src="https://github.com/user-attachments/assets/8e97e6be-835f-4f46-a231-c3779ee7ed3d" />
+<img width="916" height="256" alt="image" src="https://github.com/user-attachments/assets/5b6f231c-def5-4bc0-bb0f-70d011031a6c" />
+
+Criação de uma Key pair: KeyPair-Projeto-final  
+<img width="606" height="581" alt="image" src="https://github.com/user-attachments/assets/5d59b7bb-f88d-420d-9c50-75cf8f853bce" />
+<img width="915" height="334" alt="image" src="https://github.com/user-attachments/assets/07ee2eaa-03db-4983-8d83-f13f0e1b1f62" />
+
+<img width="917" height="589" alt="image" src="https://github.com/user-attachments/assets/4bb143e9-96cb-4cfd-8422-4b20142c439a" />
+
+User data  
+```
+#!/bin/bash
+
+# Atualiza e instala dependências
+yum update -y
+yum install -y git python3 python3-pip
+sudo dnf install mariadb105 -y
+
+# Cria o diretório onde o repositório será clonado
+mkdir -p /home/ec2-user/TechStore2
+cd /home/ec2-user/TechStore2
+
+# Clona o repositório do GitHub
+git clone https://github.com/HebertonGeovane/TechStore2.git .
+
+# Instala as dependências do Python
+pip3 install -r requirements.txt
+pip3 install flask_sqlalchemy pymysql
+
+# Exporta a variável de ambiente com o endpoint do RDS
+export DATABASE_URL="mysql+pymysql://adm:projetofinal2025@db-projeto-final.ca6mam9wtria.us-west-2.rds.amazonaws.com/db-projeto-final" # Aqui você deve substituir 'SuaSenha', 'SeuEndpointRDS' e 'SeuNomeBanco' com as informações corretas do seu banco de dados.
+
+# Cria o arquivo de configuração do Systemd
+echo "[Unit]
+Description=Flask Application
+After=network.target
+
+[Service]
+User=ec2-user
+WorkingDirectory=/home/ec2-user/TechStore2
+ExecStart=/usr/bin/python3 /home/ec2-user/TechStore2/app.py
+Restart=always
+Environment=\"DATABASE_URL=mysql+pymysql://adm:projetofinal2025@db-projeto-final.ca6mam9wtria.us-west-2.rds.amazonaws.com/db-projeto-final\" # Aqui você deve substituir 'SuaSenha', 'SeuEndpointRDS' e 'SeuNomeBanco' com as informações corretas do seu banco de dados.
+
+[Install]
+WantedBy=multi-user.target" | sudo tee /etc/systemd/system/flaskapp.service
+
+# Habilita o serviço para iniciar automaticamente
+sudo systemctl enable flaskapp
+
+# Inicia o serviço
+sudo systemctl start flaskapp 
+```
+
+Instância criada:  
+<img width="1420" height="248" alt="image" src="https://github.com/user-attachments/assets/55d7004e-c613-4203-8beb-139571b5b08a" />
+
+Conectar a instância via SSH:  
+<img width="1434" height="537" alt="image" src="https://github.com/user-attachments/assets/d14839ee-e72d-4c4a-8eca-d0763f862ba5" />
+
+
+
+
+
+
+
