@@ -30,6 +30,9 @@ Esse projeto foi desenvolvido como **Trabalho de Conclusão de Curso (TCC)** do 
 <img width="1401" height="622" alt="image" src="https://github.com/user-attachments/assets/2c9d4200-9d46-46a1-99bb-9db0a0915bbc" />
 <img width="1183" height="251" alt="image" src="https://github.com/user-attachments/assets/10988092-1bd1-418f-aec5-740418d415fe" />
 
+adicionando o 5000
+<img width="1418" height="527" alt="image" src="https://github.com/user-attachments/assets/99729243-d262-4bb7-870f-8962347ade91" />
+
 ---
 
 ## Bando de dados  
@@ -38,7 +41,7 @@ Esse projeto foi desenvolvido como **Trabalho de Conclusão de Curso (TCC)** do 
 
 nome do banco de dados: db-projeto-final  
 master username: adm  
-senha: projetofinal2025  
+senha: projetofinal2025
 
 <img width="1384" height="621" alt="image" src="https://github.com/user-attachments/assets/759b0ff6-4297-4ca7-965a-f17c66bfc966" />
 <img width="1385" height="390" alt="image" src="https://github.com/user-attachments/assets/87cf68ba-d17b-4b35-842f-dd5f75ff04dc" />
@@ -85,7 +88,7 @@ pip3 install -r requirements.txt
 pip3 install flask_sqlalchemy pymysql
 
 # Exporta a variável de ambiente com o endpoint do RDS
-export DATABASE_URL="mysql+pymysql://adm:projetofinal2025@db-projeto-final.ca6mam9wtria.us-west-2.rds.amazonaws.com/db-projeto-final" # Aqui você deve substituir 'SuaSenha', 'SeuEndpointRDS' e 'SeuNomeBanco' com as informações corretas do seu banco de dados.
+export DATABASE_URL="mysql+pymysql://admin:SuaSenha@SeuEndpointRDS/techstore" # Aqui você deve substituir 'SuaSenha', 'SeuEndpointRDS' e 'SeuNomeBanco' com as informações corretas do seu banco de dados.
 
 # Cria o arquivo de configuração do Systemd
 echo "[Unit]
@@ -97,7 +100,7 @@ User=ec2-user
 WorkingDirectory=/home/ec2-user/TechStore2
 ExecStart=/usr/bin/python3 /home/ec2-user/TechStore2/app.py
 Restart=always
-Environment=\"DATABASE_URL=mysql+pymysql://adm:projetofinal2025@db-projeto-final.ca6mam9wtria.us-west-2.rds.amazonaws.com/db-projeto-final\" # Aqui você deve substituir 'SuaSenha', 'SeuEndpointRDS' e 'SeuNomeBanco' com as informações corretas do seu banco de dados.
+Environment=\"DATABASE_URL=mysql+pymysql://admin:SuaSenha@SeuEndpointRDS/SeuNomeBanco\" # Aqui você deve substituir 'SuaSenha', 'SeuEndpointRDS' e 'techstore' com as informações corretas do seu banco de dados.
 
 [Install]
 WantedBy=multi-user.target" | sudo tee /etc/systemd/system/flaskapp.service
@@ -106,7 +109,7 @@ WantedBy=multi-user.target" | sudo tee /etc/systemd/system/flaskapp.service
 sudo systemctl enable flaskapp
 
 # Inicia o serviço
-sudo systemctl start flaskapp 
+sudo systemctl start flaskapp 
 ```
 
 Instância criada:  
@@ -115,8 +118,25 @@ Instância criada:
 Conectar a instância via SSH:  
 <img width="1434" height="537" alt="image" src="https://github.com/user-attachments/assets/d14839ee-e72d-4c4a-8eca-d0763f862ba5" />
 
+deixa o nome do banco como techstore nas duas partes
+só muda a senha e o endpoint
+depois acessa normal:  mysql -h seu endpoint -u admin -p  
+coloca a senha
+```
+MySQL [(none)]> CREATE DATABASE techstore;
+Query OK, 1 row affected (0.003 sec)
 
+MySQL [(none)]> USE techstore;
+Database changed
+MySQL [techstore]> SHOW TABLES;
+Empty set (0.001 sec)
 
+MySQL [techstore]> exit
+Bye
+```
+
+sudo systemctl start flaskapp
+sudo systemctl status flaskapp
 
 
 
